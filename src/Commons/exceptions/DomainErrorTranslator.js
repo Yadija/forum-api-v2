@@ -22,6 +22,8 @@ DomainErrorTranslator._directories = {
   'NEW_THREAD.THREAD_TITLE_LIMIT_CHAR': new InvariantError('tidak dapat membuat user baru karena karakter title thread melebihi batas limit'),
   'NEW_COMMENT.NOT_CONTAIN_NEEDED_PROPERTY': new InvariantError('tidak dapat membuat comment baru karena properti yang dibutuhkan tidak ada'),
   'NEW_COMMENT.NOT_MEET_DATA_TYPE_SPECIFICATION': new InvariantError('tidak dapat membuat comment baru karena tipe data tidak sesuai'),
+  'DELETE_COMMENT_USE_CASE.NOT_CONTAIN_COMMENT_ID': new InvariantError('harus mengirimkan id comment'),
+  'DELETE_COMMENT_USE_CASE.PAYLOAD_NOT_MEET_DATA_TYPE_SPECIFICATION': new InvariantError('id comment harus string'),
 };
 
 module.exports = DomainErrorTranslator;

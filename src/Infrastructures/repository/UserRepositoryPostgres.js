@@ -15,9 +15,9 @@ class UserRepositoryPostgres extends UserRepository {
       values: [username],
     };
 
-    const result = await this._pool.query(query);
+    const { rowCount } = await this._pool.query(query);
 
-    if (result.rowCount) {
+    if (rowCount) {
       throw new InvariantError('username tidak tersedia');
     }
   }
@@ -31,9 +31,9 @@ class UserRepositoryPostgres extends UserRepository {
       values: [id, username, password, fullname],
     };
 
-    const result = await this._pool.query(query);
+    const { rows } = await this._pool.query(query);
 
-    return new RegisteredUser({ ...result.rows[0] });
+    return new RegisteredUser({ ...rows[0] });
   }
 
   async getPasswordByUsername(username) {
@@ -42,13 +42,13 @@ class UserRepositoryPostgres extends UserRepository {
       values: [username],
     };
 
-    const result = await this._pool.query(query);
+    const { rows, rowCount } = await this._pool.query(query);
 
-    if (!result.rowCount) {
+    if (!rowCount) {
       throw new InvariantError('username tidak ditemukan');
     }
 
-    return result.rows[0].password;
+    return rows[0].password;
   }
 
   async getIdByUsername(username) {
@@ -57,13 +57,13 @@ class UserRepositoryPostgres extends UserRepository {
       values: [username],
     };
 
-    const result = await this._pool.query(query);
+    const { rows, rowCount } = await this._pool.query(query);
 
-    if (!result.rowCount) {
+    if (!rowCount) {
       throw new InvariantError('user tidak ditemukan');
     }
 
-    const { id } = result.rows[0];
+    const { id } = rows[0];
 
     return id;
   }

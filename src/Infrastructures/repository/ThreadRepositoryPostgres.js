@@ -19,8 +19,8 @@ class ThreadRepositoryPostgres extends ThreadRepository {
       values: [id, title, body, owner, date],
     };
 
-    const result = await this._pool.query(query);
-    return new AddedThread({ ...result.rows[0] });
+    const { rows } = await this._pool.query(query);
+    return new AddedThread({ ...rows[0] });
   }
 
   async checkThreadById(id) {
@@ -29,13 +29,13 @@ class ThreadRepositoryPostgres extends ThreadRepository {
       values: [id],
     };
 
-    const result = await this._pool.query(query);
+    const { rows, rowCount } = await this._pool.query(query);
 
-    if (!result.rows.length) {
+    if (!rowCount) {
       throw new NotFoundError('thread tidak ditemukan');
     }
 
-    return result.rows[0];
+    return rows[0];
   }
 }
 
