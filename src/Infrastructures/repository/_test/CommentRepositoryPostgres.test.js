@@ -9,6 +9,7 @@ const CommentRepositoryPostgres = require('../CommentRepositoryPostgres');
 
 describe('CommentRepository postgres', () => {
   afterEach(async () => {
+    await CommentsTableTestHelper.cleanTable();
     await ThreadsTableTestHelper.cleanTable();
     await UsersTableTestHelper.cleanTable();
   });
