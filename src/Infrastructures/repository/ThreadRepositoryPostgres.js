@@ -1,4 +1,5 @@
 const AddedThread = require('../../Domains/threads/entities/AddedThread');
+const DetailReply = require('../../Domains/replies/entities/DetailReply');
 const ThreadRepository = require('../../Domains/threads/ThreadRepository');
 const NotFoundError = require('../../Commons/exceptions/NotFoundError');
 
@@ -36,6 +37,45 @@ class ThreadRepositoryPostgres extends ThreadRepository {
     }
 
     return rows[0];
+  }
+
+  async getThreadById(id) {
+    const query = {
+      text: `SELECT threads.id, threads.title,
+      threads.body, threads.date, users.username 
+      FROM threads 
+      INNER JOIN users ON threads.owner = users.ID
+      WHERE threads.id = $1`,
+      values: [id],
+    };
+
+    const { rows, rowCount } = await this._pool.query(query);
+
+    if (!rowCount) {
+      throw new NotFoundError('thread tidak ditemukan');
+    }
+
+    return rows[0];
+  }
+
+  async getRepliesByThreadId(id) {
+    const query = {
+      text: `SELECT replies.id, comments.id AS comment_id, 
+      replies.is_deleted, replies.content, 
+      replies.date, users.username 
+      FROM replies 
+      INNER JOIN comments ON replies.comment_id = comments.id
+      INNER JOIN users ON replies.owner = users.id
+      WHERE comments.thread_id = $1
+      ORDER BY date ASC`,
+      values: [id],
+    };
+
+    const { rows } = await this._pool.query(query);
+
+    return rows.map((entry) => new DetailReply({
+      ...entry, commentId: entry.comment_id, isDeleted: entry.is_deleted,
+    }));
   }
 }
 

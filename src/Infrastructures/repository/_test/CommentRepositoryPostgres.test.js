@@ -6,6 +6,7 @@ const AuthorizationError = require('../../../Commons/exceptions/AuthorizationErr
 const AddedComment = require('../../../Domains/comments/entities/AddedComment');
 const pool = require('../../database/postgres/pool');
 const CommentRepositoryPostgres = require('../CommentRepositoryPostgres');
+const DetailComment = require('../../../Domains/comments/entities/DetailComment');
 
 describe('CommentRepository postgres', () => {
   afterEach(async () => {
@@ -61,6 +62,50 @@ describe('CommentRepository postgres', () => {
         content: 'New Comment',
         owner: 'user-123',
       }));
+    });
+  });
+
+  describe('getCommentsByThreadId function', () => {
+    it('should return an empty array when no comments exist for the thread', async () => {
+      const commentRepository = new CommentRepositoryPostgres(pool, {});
+
+      const commentDetails = await commentRepository.getCommentsByThreadId('thread-123');
+      expect(commentDetails).toStrictEqual([]);
+    });
+
+    it('should return all comments from a thread', async () => {
+      // Arrange
+      const userId = 'user-123';
+      const threadId = 'thread-123';
+      await UsersTableTestHelper.addUser({ id: userId, username: 'dicoding' });
+      await ThreadsTableTestHelper.addThread({
+        id: threadId,
+        owner: userId,
+      });
+      const firstComment = {
+        id: 'comment-123',
+        content: 'First Comment',
+        date: '2019',
+      };
+      const secondComment = {
+        id: 'comment-789',
+        content: 'Second Comment',
+        date: '2023',
+      };
+      await CommentsTableTestHelper.addComment({ ...firstComment, threadId, owner: userId });
+      await CommentsTableTestHelper.addComment({ ...secondComment, threadId, owner: userId });
+      const commentRepository = new CommentRepositoryPostgres(pool, {});
+
+      // Action & Assert
+      const commentDetails = await commentRepository.getCommentsByThreadId('thread-123');
+      expect(commentDetails).toEqual([
+        new DetailComment({
+          ...firstComment, username: 'dicoding', isDeleted: false, replies: [],
+        }),
+        new DetailComment({
+          ...secondComment, username: 'dicoding', isDeleted: false, replies: [],
+        }),
+      ]);
     });
   });
 
