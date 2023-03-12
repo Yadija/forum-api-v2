@@ -268,7 +268,8 @@ describe('/threads/{threadId}/comments endpoint', () => {
       await ThreadsTableTestHelper.addThread({
         id: threadId,
         owner: id,
-      });// add comment
+      });
+      // add comment
       await CommentsTableTestHelper.addComment({
         id: commentId,
         threadId,
