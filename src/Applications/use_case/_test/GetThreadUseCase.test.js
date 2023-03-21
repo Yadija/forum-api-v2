@@ -31,7 +31,7 @@ describe('GetThreadUseCase', () => {
   it('should operate the branching in the _checkIsDeletedComments function properly', async () => {
     // Arrange
     const useCasePayload = {
-      threadId: 'thread-321',
+      threadId: 'thread-123',
     };
 
     /** creating dependency of use case */
@@ -103,7 +103,7 @@ describe('GetThreadUseCase', () => {
   it('should operate the branching in the _getRepliesForComments function properly', async () => {
     // Arrange
     const useCasePayload = {
-      threadId: 'thread-321',
+      threadId: 'thread-123',
     };
 
     /** creating dependency of use case */
@@ -206,7 +206,31 @@ describe('GetThreadUseCase', () => {
   it('should orchestrating the get detail thread action correctly', async () => {
     // Arrange
     const useCasePayload = {
-      threadId: 'thread-321',
+      threadId: 'thread-123',
+    };
+
+    const expectedThreadDetail = {
+      id: 'thread-123',
+      title: 'New Thread',
+      body: 'New Body',
+      date: '2023',
+      username: 'dicoding',
+      comments: [
+        {
+          id: 'comment-123',
+          username: 'userA',
+          date: '2023',
+          content: '**komentar telah dihapus**',
+          replies: [
+            {
+              id: 'reply-123',
+              content: 'New Reply A',
+              date: '2021',
+              username: 'userC',
+            },
+          ],
+        },
+      ],
     };
 
     /** creating dependency of use case */
@@ -233,14 +257,6 @@ describe('GetThreadUseCase', () => {
           replies: [],
           isDeleted: true,
         }),
-        new DetailComment({
-          id: 'comment-321',
-          username: 'userB',
-          date: '2019',
-          content: 'New Comment B',
-          replies: [],
-          isDeleted: false,
-        }),
       ]));
     mockThreadRepository.getRepliesByThreadId = jest.fn()
       .mockImplementation(() => Promise.resolve([
@@ -252,14 +268,6 @@ describe('GetThreadUseCase', () => {
           username: 'userC',
           isDeleted: false,
         }),
-        new DetailReply({
-          id: 'reply-321',
-          commentId: 'comment-321',
-          content: 'New Reply B',
-          date: '2021',
-          username: 'userD',
-          isDeleted: true,
-        }),
       ]));
 
     /** creating use case instance */
@@ -269,9 +277,10 @@ describe('GetThreadUseCase', () => {
     });
 
     // Action
-    await getThreadUseCase.execute(useCasePayload);
+    const getThread = await getThreadUseCase.execute(useCasePayload);
 
     // Assert
+    expect(getThread).toEqual(expectedThreadDetail);
     expect(mockThreadRepository.getThreadById)
       .toHaveBeenCalledWith(useCasePayload.threadId);
     expect(mockCommentRepository.getCommentsByThreadId)

@@ -4,6 +4,7 @@ const ThreadsTableTestHelper = require('../../../../tests/ThreadsTableTestHelper
 const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper');
 const NotFoundError = require('../../../Commons/exceptions/NotFoundError');
 const AddedThread = require('../../../Domains/threads/entities/AddedThread');
+const DetailThread = require('../../../Domains/threads/entities/DetailThread');
 const pool = require('../../database/postgres/pool');
 const ThreadRepositoryPostgres = require('../ThreadRepositoryPostgres');
 
@@ -105,13 +106,13 @@ describe('ThreadRepository postgres', () => {
       const userId = 'user-123';
       await UsersTableTestHelper.addUser({ id: userId, username: 'dicoding' });
       const fakeIdGenerator = () => '123'; // stub
-      const expectedThread = {
+      const expectedThread = new DetailThread({
         id: 'thread-123',
         title: 'New Thread',
         body: 'Thread Body',
         date: '2023',
         username: 'dicoding',
-      };
+      });
       await ThreadsTableTestHelper.addThread({
         title: expectedThread.title,
         body: expectedThread.body,

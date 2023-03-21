@@ -8,7 +8,6 @@ describe('an DetailThread entity', () => {
       id: 'thread-123',
       title: 'New Thread',
       body: 'New Body',
-      username: 'user-123',
     };
 
     // action and assert
@@ -23,7 +22,6 @@ describe('an DetailThread entity', () => {
       body: 321,
       date: [],
       username: 789,
-      comments: 'Some Comments',
     };
 
     // action and assert
@@ -38,7 +36,6 @@ describe('an DetailThread entity', () => {
       body: 'New Body',
       date: '2023',
       username: 'dicoding',
-      comments: [],
     };
 
     // Action
@@ -50,6 +47,5 @@ describe('an DetailThread entity', () => {
     expect(detailThread.body).toEqual(payload.body);
     expect(detailThread.date).toEqual(payload.date);
     expect(detailThread.username).toEqual(payload.username);
-    expect(detailThread.comments).toEqual(payload.comments);
   });
 });

@@ -25,7 +25,11 @@ describe('AddReplyUseCase', () => {
 
     /** mocking needed function */
     mockReplyRepository.addReply = jest.fn()
-      .mockImplementation(() => Promise.resolve(expectedAddedReply));
+      .mockImplementation(() => Promise.resolve(new AddedReply({
+        id: 'reply-123',
+        content: useCasePayload.content,
+        owner: useCasePayload.owner,
+      })));
     mockCommentRepository.checkCommentIsExist = jest.fn()
       .mockImplementation(() => Promise.resolve());
 

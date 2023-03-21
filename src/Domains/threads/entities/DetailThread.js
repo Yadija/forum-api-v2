@@ -16,10 +16,10 @@ class DetailThread {
 
   _verifypayload(payload) {
     const {
-      id, title, body, date, username, comments,
+      id, title, body, date, username,
     } = payload;
 
-    if (!id || !title || !body || !date || !username || !comments) {
+    if (!id || !title || !body || !date || !username) {
       throw new Error('DETAIL_THREAD.NOT_CONTAIN_NEEDED_PROPERTY');
     }
 
@@ -27,8 +27,7 @@ class DetailThread {
     || typeof title !== 'string'
     || typeof body !== 'string'
     || typeof date !== 'string'
-    || typeof username !== 'string'
-    || !(Array.isArray(comments))) {
+    || typeof username !== 'string') {
       throw new Error('DETAIL_THREAD.NOT_MEET_DATA_TYPE_SPECIFICATION');
     }
   }
