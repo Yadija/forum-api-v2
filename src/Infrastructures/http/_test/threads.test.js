@@ -121,6 +121,7 @@ describe('/threads endpoint', () => {
       expect(responseJson.data.thread.comments[0].id).toEqual(commentId);
       expect(responseJson.data.thread.comments[0].content).toEqual('New Comment');
       expect(responseJson.data.thread.comments[0].username).toEqual('dicoding');
+      expect(responseJson.data.thread.comments[0].likeCount).toEqual(0);
       expect(responseJson.data.thread.comments[0].replies).toBeDefined();
       expect(responseJson.data.thread.comments[0].replies.length).toEqual(1);
     });

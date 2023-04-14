@@ -100,10 +100,10 @@ describe('CommentRepository postgres', () => {
       const commentDetails = await commentRepository.getCommentsByThreadId('thread-123');
       expect(commentDetails).toEqual([
         new DetailComment({
-          ...firstComment, username: 'dicoding', isDeleted: false, replies: [],
+          ...firstComment, username: 'dicoding', isDeleted: false, replies: [], likeCount: 0,
         }),
         new DetailComment({
-          ...secondComment, username: 'dicoding', isDeleted: false, replies: [],
+          ...secondComment, username: 'dicoding', isDeleted: false, replies: [], likeCount: 0,
         }),
       ]);
     });

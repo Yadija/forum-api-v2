@@ -22,6 +22,7 @@ describe('an DetailComment entity', () => {
       date: 2023,
       content: true,
       replies: 321,
+      likeCount: '0',
       isDeleted: 'false',
     };
 
@@ -37,6 +38,7 @@ describe('an DetailComment entity', () => {
       date: '2023',
       content: 'New Comment',
       replies: [],
+      likeCount: 0,
       isDeleted: false,
     };
 
@@ -49,6 +51,7 @@ describe('an DetailComment entity', () => {
     expect(detailComment.date).toEqual(payload.date);
     expect(detailComment.content).toEqual(payload.content);
     expect(detailComment.replies).toEqual(payload.replies);
+    expect(detailComment.likeCount).toEqual(payload.likeCount);
     expect(detailComment.isDeleted).toEqual(payload.isDeleted);
   });
 });
