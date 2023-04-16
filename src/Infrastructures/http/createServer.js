@@ -42,7 +42,7 @@ const createServer = async (container) => {
     }),
   });
 
-  await server.register([
+  const registering = [
     {
       plugin: users,
       options: { container },
@@ -67,7 +67,25 @@ const createServer = async (container) => {
       plugin: likes,
       options: { container },
     },
-  ]);
+  ];
+
+  const limitRate = {
+    plugin: require('hapi-rate-limit'),
+    options: {
+      userLimit: 90,
+      userCache: {
+        expiresIn: 60000,
+      },
+      addressOnly: true,
+      pathLimit: false,
+    },
+  };
+
+  if (process.env.NODE_ENV === 'test') {
+    await server.register(registering);
+  } else {
+    await server.register([...registering, limitRate]);
+  }
 
   server.ext('onPreResponse', (request, h) => {
     // mendapatkan konteks response dari request
